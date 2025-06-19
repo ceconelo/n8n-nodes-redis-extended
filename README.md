@@ -1,48 +1,122 @@
-![Banner image](https://user-images.githubusercontent.com/10284570/173569848-c624317f-42b1-45a6-ab09-f0ea3c247648.png)
+# n8n-nodes-redis-extended
 
-# n8n-nodes-starter
+This is an n8n community node. It lets you use **Redis** with extended operations in your n8n workflows.
 
-This repo contains example nodes to help you get started building your own custom integrations for [n8n](https://n8n.io). It includes the node linter and other dependencies.
+**Redis Extended** is an enhanced Redis integration that provides additional hash operations (HGET, HDEL, HKEYS) beyond the basic Redis functionality, allowing for more granular control over Redis hash data structures.
 
-To make your custom node available to the community, you must create it as an npm package, and [submit it to the npm registry](https://docs.npmjs.com/packages-and-modules/contributing-packages-to-the-registry).
+[n8n](https://n8n.io/) is a [fair-code licensed](https://docs.n8n.io/reference/license/) workflow automation platform.
 
-If you would like your node to be available on n8n cloud you can also [submit your node for verification](https://docs.n8n.io/integrations/creating-nodes/deploy/submit-community-nodes/).
+[Installation](#installation)  
+[Operations](#operations)  
+[Credentials](#credentials)  
+[Compatibility](#compatibility)  
+[Usage](#usage)  
+[Resources](#resources)
 
-## Prerequisites
+## Installation
 
-You need the following installed on your development machine:
+Follow the [installation guide](https://docs.n8n.io/integrations/community-nodes/installation/) in the n8n community nodes documentation.
 
-* [git](https://git-scm.com/downloads)
-* Node.js and npm. Minimum version Node 20. You can find instructions on how to install both using nvm (Node Version Manager) for Linux, Mac, and WSL [here](https://github.com/nvm-sh/nvm). For Windows users, refer to Microsoft's guide to [Install NodeJS on Windows](https://docs.microsoft.com/en-us/windows/dev-environment/javascript/nodejs-on-windows).
-* Install n8n with:
-  ```
-  npm install n8n -g
-  ```
-* Recommended: follow n8n's guide to [set up your development environment](https://docs.n8n.io/integrations/creating-nodes/build/node-development-environment/).
+Use the package name: `@iaconnecto/n8n-nodes-redis-extended`
 
-## Using this starter
+## Operations
 
-These are the basic steps for working with the starter. For detailed guidance on creating and publishing nodes, refer to the [documentation](https://docs.n8n.io/integrations/creating-nodes/).
+This node provides comprehensive Redis operations including specialized hash operations:
 
-1. [Generate a new repository](https://github.com/n8n-io/n8n-nodes-starter/generate) from this template repository.
-2. Clone your new repo:
-   ```
-   git clone https://github.com/<your organization>/<your-repo-name>.git
-   ```
-3. Run `npm i` to install dependencies.
-4. Open the project in your editor.
-5. Browse the examples in `/nodes` and `/credentials`. Modify the examples, or replace them with your own nodes.
-6. Update the `package.json` to match your details.
-7. Run `npm run lint` to check for errors or `npm run lintfix` to automatically fix errors when possible.
-8. Test your node locally. Refer to [Run your node locally](https://docs.n8n.io/integrations/creating-nodes/test/run-node-locally/) for guidance.
-9. Replace this README with documentation for your node. Use the [README_TEMPLATE](README_TEMPLATE.md) to get started.
-10. Update the LICENSE file to use your details.
-11. [Publish](https://docs.npmjs.com/packages-and-modules/contributing-packages-to-the-registry) your package to npm.
+### Core Operations
 
-## More information
+- **Delete**: Delete a key from Redis
+- **Get**: Get the value of a key from Redis (supports automatic type detection for string, hash, list, sets)
+- **Set**: Set the value of a key in Redis
+- **Increment**: Atomically increment a key by 1 (creates the key if it doesn't exist)
+- **Info**: Get generic information about the Redis instance
+- **Keys**: Get all keys matching a pattern with optional value retrieval
+- **Publish**: Publish message to Redis channel
+- **Push**: Push data to a Redis list (supports head/tail operations)
+- **Pop**: Pop data from a Redis list (supports head/tail operations)
 
-Refer to our [documentation on creating nodes](https://docs.n8n.io/integrations/creating-nodes/) for detailed information on building your own nodes.
+### Hash Operations (Extended)
 
-## License
+- **Hash Get (HGET)**: Get the value of a specific field in a hash
+- **Hash Delete (HDEL)**: Delete one or more fields from a hash (supports comma-separated field names)
+- **Hash Keys (HKEYS)**: Get all field names in a hash
 
-[MIT](https://github.com/n8n-io/n8n-nodes-starter/blob/master/LICENSE.md)
+### Advanced Features
+
+- **Dot notation support**: Use dot notation for nested property assignment (e.g., `data.user.name`)
+- **Multiple data types**: Automatic handling of strings, hashes, lists, and sets
+- **TTL support**: Set expiration times for keys
+- **JSON parsing**: Automatic JSON parsing for complex data structures
+- **Batch operations**: Support for multiple field operations in hash commands
+
+## Credentials
+
+To use this node, you need to configure Redis credentials with the following fields:
+
+- **Host**: Redis server hostname (default: `localhost`)
+- **Port**: Redis server port (default: `6379`)
+- **Password**: Redis authentication password (if required)
+- **User**: Redis username (leave blank for password-only auth)
+- **Database Number**: Redis database number (default: `0`)
+- **SSL**: Enable SSL/TLS connection (default: `false`)
+
+### Setting up Redis credentials:
+
+1. In n8n, go to **Credentials** → **New**
+2. Search for "Redis" and select it
+3. Fill in your Redis connection details
+4. Test the connection
+5. Save the credentials
+
+## Compatibility
+
+- **Minimum n8n version**: 0.198.0+
+- **Node.js**: >=20.15
+- **Redis**: Compatible with Redis 5.0+ and Redis Stack
+- **Tested with**: n8n v1.0+
+
+### Known compatibility:
+
+- ✅ Redis Cloud
+- ✅ AWS ElastiCache
+- ✅ Azure Cache for Redis
+- ✅ Self-hosted Redis instances
+- ✅ Redis Stack (with JSON and Search modules)
+
+## Usage
+
+### Basic Key Operations
+
+Use **Get**, **Set**, and **Delete** operations for simple key-value operations.
+
+### Hash Operations (Advanced)
+
+The hash operations provide granular control over Redis hash data structures:
+
+**Hash Get Example:**
+
+- Use when you need only a specific field from a large hash
+- More efficient than getting the entire hash with `HGETALL`
+
+**Hash Delete Example:**
+
+- Delete specific fields without affecting other hash data
+- Supports multiple fields: `field1,field2,field3`
+
+**Hash Keys Example:**
+
+- Get a list of all available fields in a hash
+- Useful for dynamic field processing
+
+### Performance Tips
+
+- Use **Hash Get** instead of **Get** with hash type when you only need specific fields
+- Use **Keys** operation with patterns to efficiently filter large keysets
+- Enable TTL for temporary data to prevent memory bloat
+
+## Resources
+
+- [n8n community nodes documentation](https://docs.n8n.io/integrations/community-nodes/)
+- [Redis Official Documentation](https://redis.io/docs/)
+- [Redis Hash Commands Reference](https://redis.io/commands/?group=hash)
+- [n8n Redis Integration Guide](https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.redis/)
