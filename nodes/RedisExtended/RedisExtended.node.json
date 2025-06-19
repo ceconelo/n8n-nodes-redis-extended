@@ -1,5 +1,5 @@
 {
-	"node": "n8n-nodes-redis-extended",
+	"node": "n8n-nodes-base.redisExtended",
 	"nodeVersion": "1.0",
 	"codexVersion": "1.0",
 	"categories": ["Development", "Data & Storage"],

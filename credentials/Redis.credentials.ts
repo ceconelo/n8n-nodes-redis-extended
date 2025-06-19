@@ -5,7 +5,7 @@ export class Redis implements ICredentialType {
 
 	displayName = 'Redis';
 
-	documentationUrl = 'redis';
+	documentationUrl = 'https://redis.io/docs/';
 
 	properties: INodeProperties[] = [
 		{

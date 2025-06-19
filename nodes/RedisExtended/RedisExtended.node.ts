@@ -5,7 +5,7 @@ import type {
 	INodeType,
 	INodeTypeDescription,
 } from 'n8n-workflow';
-import { nodeConnectionTypes, NodeOperationError } from 'n8n-workflow';
+import { NodeConnectionType, NodeOperationError } from 'n8n-workflow';
 
 import type { RedisCredential } from './types';
 import {
@@ -19,16 +19,19 @@ import {
 export class RedisExtended implements INodeType {
 	description: INodeTypeDescription = {
 		displayName: 'RedisExtended',
-		name: 'RedisExtended',
-		icon: 'file:redis.svg',
+		name: 'redisExtended',
+		icon: {
+			light: 'file:redis.svg',
+			dark: 'file:redis.svg',
+		},
 		group: ['input'],
 		version: 1,
 		description: 'Get, send and update data in Redis',
 		defaults: {
 			name: 'RedisExtended',
 		},
-		inputs: [nodeConnectionTypes[-1]],
-		outputs: [nodeConnectionTypes[-1]],
+		inputs: [NodeConnectionType.Main],
+		outputs: [NodeConnectionType.Main],
 		usableAsTool: true,
 		credentials: [
 			{
@@ -48,25 +51,43 @@ export class RedisExtended implements INodeType {
 						name: 'Delete',
 						value: 'delete',
 						description: 'Delete a key from Redis',
-						action: 'Delete a key from Redis',
+						action: 'Delete a key from redis',
 					},
 					{
 						name: 'Get',
 						value: 'get',
 						description: 'Get the value of a key from Redis',
-						action: 'Get the value of a key from Redis',
+						action: 'Get the value of a key from redis',
+					},
+					{
+						name: 'Hash Delete',
+						value: 'hdel',
+						description: 'Delete one or more hash fields',
+						action: 'Delete one or more hash fields',
+					},
+					{
+						name: 'Hash Get',
+						value: 'hget',
+						description: 'Get the value of a hash field',
+						action: 'Get the value of a hash field',
+					},
+					{
+						name: 'Hash Keys',
+						value: 'hkeys',
+						description: 'Get all field names in a hash',
+						action: 'Get all field names in a hash',
 					},
 					{
 						name: 'Increment',
 						value: 'incr',
 						description: 'Atomically increments a key by 1. Creates the key if it does not exist.',
-						action: 'Atomically increment a key by 1. Creates the key if it does not exist.',
+						action: 'Atomically increment a key by 1 creates the key if it does not exist',
 					},
 					{
 						name: 'Info',
 						value: 'info',
 						description: 'Returns generic information about the Redis instance',
-						action: 'Return generic information about the Redis instance',
+						action: 'Return generic information about the redis instance',
 					},
 					{
 						name: 'Keys',
@@ -97,24 +118,6 @@ export class RedisExtended implements INodeType {
 						value: 'set',
 						description: 'Set the value of a key in redis',
 						action: 'Set the value of a key in redis',
-					},
-					{
-						name: 'Hash Get',
-						value: 'hget',
-						description: 'Get the value of a hash field',
-						action: 'Get the value of a hash field',
-					},
-					{
-						name: 'Hash Delete',
-						value: 'hdel',
-						description: 'Delete one or more hash fields',
-						action: 'Delete one or more hash fields',
-					},
-					{
-						name: 'Hash Keys',
-						value: 'hkeys',
-						description: 'Get all field names in a hash',
-						action: 'Get all field names in a hash',
 					},
 				],
 				default: 'info',
@@ -354,7 +357,7 @@ export class RedisExtended implements INodeType {
 						type: 'boolean',
 						default: true,
 						description:
-							'By default, dot-notation is used in property names. This means that "a.b" will set the property "b" underneath "a" so { "a": { "b": value} }. If that is not intended this can be deactivated, it will then set { "a.b": value } instead.',
+							'Whether to use dot-notation in property names. This means that "a.b" will set the property "b" underneath "a" so { "a": { "b": value} }. If that is not intended this can be deactivated, it will then set { "a.b": value } instead.',
 					},
 				],
 			},
@@ -438,7 +441,7 @@ export class RedisExtended implements INodeType {
 						type: 'boolean',
 						default: true,
 						description:
-							'By default, dot-notation is used in property names. This means that "a.b" will set the property "b" underneath "a" so { "a": { "b": value} }. If that is not intended this can be deactivated, it will then set { "a.b": value } instead.',
+							'Whether to use dot-notation in property names. This means that "a.b" will set the property "b" underneath "a" so { "a": { "b": value} }. If that is not intended this can be deactivated, it will then set { "a.b": value } instead.',
 					},
 				],
 			},
